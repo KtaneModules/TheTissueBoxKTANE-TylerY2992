@@ -1,0 +1,10 @@
+{
+  "name": "TheTissueBox-Editor",
+  "references": [
+    "TheTissueBox"
+  ],
+  "includePlatforms": [
+    "Editor"
+  ],
+  "excludePlatforms": []
+}
