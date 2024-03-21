@@ -129,4 +129,62 @@ public class TissueBox : MonoBehaviour {
         }
 
     }
+
+    //twitch plays
+    #pragma warning disable 414
+    private readonly string TwitchHelpMessage = @"!{0} pull <1-150> [Pulls out the specified number of tissues]";
+    #pragma warning restore 414
+
+    IEnumerator ProcessTwitchCommand(string command)
+    {
+        string[] parameters = command.Split(' ');
+        if (parameters[0].EqualsIgnoreCase("pull"))
+        {
+            if (parameters.Length > 2)
+                yield return "sendtochaterror Too many parameters!";
+            else if (parameters.Length == 2)
+            {
+                int temp = -1;
+                if (!int.TryParse(parameters[1], out temp))
+                {
+                    yield return "sendtochaterror!f The specified number of tissues '" + parameters[1] + "' is invalid!";
+                    yield break;
+                }
+                if (temp < 1 || temp > 150)
+                {
+                    yield return "sendtochaterror The specified number of tissues '" + parameters[1] + "' is invalid!";
+                    yield break;
+                }
+                yield return null;
+                while (Click < temp)
+                {
+                    tissue[0].OnInteract();
+                    yield return new WaitForSeconds(.01f);
+                }
+                if (Click == targetClick)
+                    yield return "solve";
+                else
+                    yield return "strike";
+            }
+            else if (parameters.Length == 1)
+                yield return "sendtochaterror Please specify a number of tissues to pull!";
+        }
+    }
+
+    IEnumerator TwitchHandleForcedSolve()
+    {
+        if (Click > targetClick)
+        {
+            module.HandlePass();
+            isSolved = true;
+            StopAllCoroutines();
+            yield break;
+        }
+        while (Click < targetClick)
+        {
+            tissue[0].OnInteract();
+            yield return new WaitForSeconds(.01f);
+        }
+        while (!isSolved) yield return true;
+    }
 }
