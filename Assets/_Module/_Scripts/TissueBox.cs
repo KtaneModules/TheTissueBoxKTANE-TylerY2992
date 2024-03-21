@@ -40,19 +40,19 @@ public class TissueBox : MonoBehaviour {
 			if (edgework.GetSerialNumberNumbers().Last() < 6 && edgework.GetSerialNumberNumbers().Last() != 0)
 			{
 				Seconds = 45;
-                Debug.LogFormat("[The Tissue Box #{0}] Number of seconds: {1}", moduleID, Seconds);
+                Debug.LogFormat("[The Tissue Box™ #{0}] Number of seconds: {1}", moduleID, Seconds);
                 targetClick = (edgework.GetBatteryCount() * edgework.GetPortCount() + 10) * edgework.GetSerialNumberNumbers().Last();
-                Debug.LogFormat("[The Tissue Box #{0}] Target number of tissues to pull: {1}", moduleID, targetClick);
+                Debug.LogFormat("[The Tissue Box™ #{0}] Target number of tissues to pull: {1}", moduleID, targetClick);
 
             }
 			else
 			{
 				Seconds = edgework.GetSerialNumberNumbers().Last() * 3.5f;
 				if (edgework.GetSerialNumberNumbers().Last() > 0)
-				{ Debug.LogFormat("[The Tissue Box #{0}] Number of seconds: {1}", moduleID, Seconds); }
+				{ Debug.LogFormat("[The Tissue Box™ #{0}] Number of seconds: {1}", moduleID, Seconds); }
                 targetClick = 10 * edgework.GetSerialNumberNumbers().Last();
 				if (edgework.GetSerialNumberNumbers().Last() > 0)
-				{ Debug.LogFormat("[The Tissue Box #{0}] Target number of tissues to pull: {1}", moduleID, targetClick); }
+				{ Debug.LogFormat("[The Tissue Box™ #{0}] Target number of tissues to pull: {1}", moduleID, targetClick); }
 
             }
 		}
@@ -62,18 +62,18 @@ public class TissueBox : MonoBehaviour {
             if (edgework.GetSerialNumberNumbers().Last() < 6 && edgework.GetSerialNumberNumbers().Last() != 0)
             {
                 Seconds = edgework.GetSerialNumberNumbers().Last() * 3.5f;
-                Debug.LogFormat("[The Tissue Box #{0}] Number of seconds: {1}", moduleID, Seconds);
+                Debug.LogFormat("[The Tissue Box™ #{0}] Number of seconds: {1}", moduleID, Seconds);
                 targetClick = 10 * edgework.GetSerialNumberNumbers().Last();
-                Debug.LogFormat("[The Tissue Box #{0}] Target number of tissues to pull: {1}", moduleID, targetClick);
+                Debug.LogFormat("[The Tissue Box™ #{0}] Target number of tissues to pull: {1}", moduleID, targetClick);
             }
             else
             {
 				Seconds = edgework.GetBatteryCount() + edgework.GetPortCount() + edgework.GetIndicators().ToList().Count + edgework.GetSerialNumberNumbers().Last() + 5;
 				if (edgework.GetSerialNumberNumbers().Last() > 0)
-				{ Debug.LogFormat("[The Tissue Box #{0}] Number of seconds: {1}", moduleID, Seconds); }
+				{ Debug.LogFormat("[The Tissue Box™ #{0}] Number of seconds: {1}", moduleID, Seconds); }
                 targetClick = (int)Mathf.Pow(3, (edgework.GetSerialNumberNumbers().Last() - 5));
 				if (edgework.GetSerialNumberNumbers().Last() > 0)
-				{ Debug.LogFormat("[The Tissue Box #{0}] Target number of tissues to pull: {1}", moduleID, targetClick); }
+				{ Debug.LogFormat("[The Tissue Box™ #{0}] Target number of tissues to pull: {1}", moduleID, targetClick); }
             }
         }
         if (edgework.GetSerialNumberNumbers().Last() == 0)
@@ -81,19 +81,25 @@ public class TissueBox : MonoBehaviour {
             Seconds = (edgework.GetModuleNames().ToList().Count % 10) * 20;
             if (Seconds == 0)
             { Seconds = 35; }
-            Debug.LogFormat("[The Tissue Box #{0}] Number of seconds: {1}", moduleID, Seconds);
+            Debug.LogFormat("[The Tissue Box™ #{0}] Number of seconds: {1}", moduleID, Seconds);
             targetClick = edgework.GetSerialNumber().Select(c => char.IsDigit(c) ? c - '0' : c - '@').ToList().Sum();
-            Debug.LogFormat("[The Tissue Box #{0}] Target number of tissues to pull: {1}", moduleID, targetClick);
+            Debug.LogFormat("[The Tissue Box™ #{0}] Target number of tissues to pull: {1}", moduleID, targetClick);
         }
-        Seconds = Seconds % 150;
-        Debug.LogFormat("[The Tissue Box #{0}] Modified number of seconds after global % 150: {1}", moduleID, Seconds);
-        targetClick = targetClick % 150;
-        Debug.LogFormat("[The Tissue Box #{0}] Modified target number of tissues to pull after global % 150: {1}", moduleID, targetClick); 
+        if (Seconds > 150)
+        { Seconds = Seconds % 150; }
+        if (Seconds == 0)
+        { Seconds = Seconds + 1; }
+        Debug.LogFormat("[The Tissue Box™ #{0}] Modified number of seconds after global % 150: {1}", moduleID, Seconds);
+        if (targetClick > 150)
+        { targetClick = targetClick % 150; }
+        if (targetClick == 0)
+        { targetClick = targetClick + 1; }
+        Debug.LogFormat("[The Tissue Box™ #{0}] Modified target number of tissues to pull after global % 150: {1}", moduleID, targetClick); 
 		if (targetClick / Seconds > 5)
 		{
 			targetClick = 80;
 			Seconds = 20;
-            Debug.LogFormat("[The Tissue Box #{0}] The calculated clicks per second was greater than 5. Therefore, the override rule applies. The target number of tissues to pull is 80 and the number of seconds is 20.", moduleID);
+            Debug.LogFormat("[The Tissue Box™ #{0}] The calculated clicks per second was greater than 5. Therefore, the override rule applies. The target number of tissues to pull is 80 and the number of seconds is 20.", moduleID);
         }
     }
 	private void pressTissue()
@@ -118,14 +124,14 @@ public class TissueBox : MonoBehaviour {
             module.HandleStrike();
             isCounting = false;
             displayText.text = "NOPE";
-            Debug.LogFormat("[The Tissue Box #{0}] You pulled {1} tissues. Strike!", moduleID, Click); 
+            Debug.LogFormat("[The Tissue Box™ #{0}] You pulled {1} tissues. Strike!", moduleID, Click); 
 			Click = 0;
         }
 		else
 		{
 			module.HandlePass();
 			isSolved = true;
-            Debug.LogFormat("[The Tissue Box #{0}] Hooray! You are so good at this bomb defusal stuff :)", moduleID);
+            Debug.LogFormat("[The Tissue Box™ #{0}] Hooray! You are so good at this bomb defusal stuff :)", moduleID);
         }
 
     }
